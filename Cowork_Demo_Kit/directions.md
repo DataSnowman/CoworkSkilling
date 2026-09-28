@@ -18,6 +18,96 @@ This guide may be shared. **Do not attach presenter-validation.md to Cowork duri
 
 The kit also contains directions.md and presenter-validation.md: six Office inputs plus two Markdown guides. It contains no prerecorded outputs, scripts, or older selection guide. Open and inspect inputs without changing them; save generated results under the distinct output filenames above.
 
+## Train-the-trainer outcomes
+
+By the end of the session, each trainer should be able to:
+
+1. Frame Cowork as a supervised task environment, not an autonomous source of
+   truth or a replacement for application controls.
+2. Explain the anatomy of a bounded prompt: exact inputs, requested editable
+   outputs, grounding rules, exclusions, verification, and failure behavior.
+3. Run at least one pack in a fresh task and verify the generated files against
+   the original sources before showing them.
+4. Demonstrate why traceability, formulas, evidence boundaries, and unresolved
+   gaps matter more than polished language.
+5. Explain how a successful procedure becomes a `SKILL.md`, and distinguish the
+   skill from its required data source, connector, permissions, and actions.
+6. Handle a slow, incomplete, or incorrect run without concealing the failure.
+
+### Suggested 90-minute trainer agenda
+
+| Segment | Minutes | Trainer method |
+| --- | ---: | --- |
+| Outcomes, fictional-data statement, and boundaries | 10 | Explain and question |
+| Bounded-prompt anatomy | 10 | Annotate one main prompt |
+| RFP pack | 15 | Demonstrate and inspect |
+| CSR pack | 15 | Demonstrate and inspect |
+| KPI pack | 15 | Demonstrate and inspect |
+| Reusable skills and source/action boundaries | 10 | Compare two `SKILL.md` examples |
+| Teach-back and failure drill | 10 | Participant practice |
+| Readiness check and close | 5 | Checklist |
+
+The facilitator may demonstrate one pack deeply and assign the other two as
+teach-back exercises. Do not trade away source verification to fit all three.
+
+### Facilitation pattern for every pack
+
+Use the same six-part rhythm so future trainers can reproduce the session:
+
+1. **Frame:** state the business question, fictional scope, and what the
+   exercise does not establish.
+2. **Bound:** point out exact attachments, outputs, exclusions, and actions the
+   prompt forbids.
+3. **Run:** use a fresh Cowork task and paste the prompt without the answer key.
+4. **Inspect privately:** open the generated files and check the relevant
+   acceptance criteria before screen sharing them.
+5. **Trace:** show one output claim or formula beside its actual source.
+6. **Challenge:** run the follow-up audit and show a correction, retained gap,
+   or honestly reported limitation.
+
+### Teach-back exercise
+
+Assign each participant one pack. Give them five minutes to prepare a
+two-minute explanation containing:
+
+- the pack's business value;
+- one grounding or data-quality trap;
+- one output checkpoint they must inspect;
+- one statement they must not claim; and
+- their response if the run is slow, incomplete, or wrong.
+
+Peers should evaluate whether the explanation distinguishes generated content
+from verified evidence. A trainer is not ready merely because they can paste
+the prompt.
+
+### Skill discussion after the packs
+
+Use the repository's `skills/rentalagent-fabric-data/SKILL.md` and
+`skills/simplerentalagent-fabric-data/SKILL.md` to compare detailed and minimal
+skill design. Emphasize:
+
+- frontmatter controls discovery; the folder and `name` must match;
+- the description should trigger only for the intended requests;
+- a skill supplies reusable instructions but does not create a Fabric agent,
+  connector, permission, or email capability;
+- sources must be available and authorized in the current session;
+- outbound email requires recipient/content confirmation and may be unavailable;
+- changes require OneDrive synchronization and a fresh-session behavioral test.
+
+Keep only one overlapping rental-data skill active while testing, or narrow the
+descriptions so the intended skill can be selected reliably.
+
+### Trainer readiness gate
+
+Before someone presents independently, confirm that they can:
+
+- run the chosen pack using only its exact attachments;
+- inspect rather than merely display the outputs;
+- locate the matching checks in `presenter-validation.md` without exposing it;
+- explain prompt instructions versus technical security/permission controls;
+- use a labeled rehearsal backup without calling it live; and
+- stop or disclose limitations rather than inventing success.
+
 ## Prepare and rehearse
 
 1. Use Darwin's actual approved work laptop, Cowork account, network, and Office apps. Confirm attachment upload, new-task isolation, file creation, download, and Word/Excel opening work under applicable organizational policy. Do not assume another account or customer environment behaves the same way.
