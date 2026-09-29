@@ -24,10 +24,13 @@ Cowork_Demo_Kit/
   RFP/                          Three fictional RFP input documents
   CSR/                          Two fictional CSR input documents
   KPI/                          One fictional sales-order workbook
+dashboard/
+  Financial Sample.xlsx         Spreadsheet snapshot for the dashboard progression
 skills/
   rentalagent-fabric-data/      Detailed Fabric/Power BI data skill
   simplerentalagent-fabric-data/Smaller Fabric data skill for teaching
   onedrive-document-dashboard2/ OneDrive dashboard workflow skill
+  spreadsheet-operations-dashboard/ Snapshot spreadsheet dashboard skill
 training/
   CoworkSkilling-Train-the-Trainer.pptx
 ```
@@ -50,7 +53,7 @@ champions who will run Cowork demonstrations.
 | RFP demonstration | 15 | Show traceable drafting and visible evidence gaps |
 | CSR demonstration | 15 | Preserve entity, period, metric, and assurance boundaries |
 | KPI demonstration | 15 | Verify rule order, formulas, lineage, and reconciliation |
-| From procedure to `SKILL.md` | 10 | Explain triggers, source rules, actions, and quality gates |
+| From procedure to `SKILL.md` | 10 | Run the dashboard progression: same task as a prompt, then as a skill |
 | Facilitation practice and teach-back | 10 | Rehearse opening, checkpoints, and failure handling |
 | Close and readiness check | 5 | Confirm each trainer can run and validate a session |
 
@@ -104,6 +107,112 @@ For every pack:
 
 A chat response does not pass when the prompt requested editable files.
 
+## Progression demo: prompt first, then skill
+
+This is the clearest way to teach why skills exist. Run the same work twice—
+once as a one-off prompt, once as an imported skill—and compare what each run
+guarantees.
+
+**Input:** `dashboard/Financial Sample.xlsx` (a snapshot workbook with
+`Segment`, `Country`, `Product`, `Discount Band`, `Units Sold`, `Sale Price`,
+`Gross Sales`, `Discounts`, `Sales`, `COGS`, `Profit`, `Date`, `Month Name`,
+and `Year`).
+
+### Step 1 — Run it as a plain prompt
+
+Start a fresh Cowork task, attach only the workbook, and paste:
+
+```text
+Turn this spreadsheet into an interactive operations dashboard. Include
+searchable records, status filters, and a detail view. Highlight records
+needing attention using only rules supported by the data. Use the attached
+data as a snapshot; do not imply a live connection. Keep the first version
+small and useful.
+```
+
+Then inspect the result out loud with the class:
+
+- Which columns did it actually filter on, and do they exist in the file?
+- Are the "needs attention" rules traceable to real values, or invented
+  thresholds and risk scores?
+- Did anything imply refresh, live data, or a connected system?
+- Would a second person running this prompt get the same boundaries?
+
+Expect a usable dashboard and inconsistent guardrails. That gap is the lesson.
+
+### Step 2 — Run it again with the skill
+
+Import `skills/spreadsheet-operations-dashboard/SKILL.md`, open a new task,
+attach the same workbook, and ask for the dashboard again in your own words.
+
+Now the rules travel with the request instead of the prompt: snapshot-only
+framing, real-column filters, a detail view, missing data treated as unknown,
+the source workbook left intact, and attention highlighting limited to
+conditions the data supports—negative `Profit`, zero `Sales` or `Units Sold`,
+and incomplete rows.
+
+### Step 3 — Debrief the difference
+
+| Question | One-off prompt | Imported skill |
+| --- | --- | --- |
+| Where do the rules live? | In one person's prompt text | In `SKILL.md` |
+| Repeatable by a colleague? | Only if they retype it exactly | Yes, by intent |
+| Attention rules bounded? | Left to the model | Enumerated and testable |
+| Snapshot framing enforced? | Restated every time | Stated once in the skill |
+| Reviewable before use? | No shared artifact | A file you can diff and approve |
+
+Make the boundary explicit: the skill did not connect to a system, refresh
+data, or grant access. It made the same task repeatable and reviewable.
+
+## Executive demo: “I’m back from vacation”
+
+**Opening:** “I’m back from vacation. Don’t summarize the noise—find what
+needs me.”
+
+**Best for:** Executives and anyone drowning in Microsoft 365.
+
+Run this only in a rehearsed, demo-safe account with approved email and Teams
+content. Confirm that Cowork has authorized access to both sources before the
+session, disable notifications, and share only the intended application
+window.
+
+### Demo prompt
+
+```text
+Review my email and Teams messages from the last seven days. Find three
+unresolved items that explicitly require my decision or response. For each,
+show the latest request, relevant deadline, and source. Check for later replies
+so you don’t surface something already resolved. Draft a response to the most
+urgent item, but do not send it.
+```
+
+The result should favor explicit requests for the current user rather than
+general mentions, informational messages, or inferred obligations. Each item
+must link or cite the original source, distinguish a stated deadline from an
+inferred priority, and account for later replies or status changes. If fewer
+than three qualifying unresolved items exist, return fewer—never fill the list
+with weaker guesses.
+
+### The reveal
+
+Open the original request for the most urgent item, show the later email or
+Teams context that establishes it is still unresolved, and then inspect the
+tailored draft. Verify that the draft answers the actual latest request,
+preserves unknowns, and makes no commitment beyond the available evidence.
+Keep it as a draft; do not send it.
+
+**Why it lands:** It demonstrates relevance and judgment—not just
+summarization. The audience sees Cowork filter activity into a small,
+source-backed decision queue and carry one item into a useful next step.
+
+**Trade-off:** The scenario is highly relatable, but real mailbox and Teams
+content create privacy and predictability risks. Use a rehearsed, demo-safe
+account with seeded or approved content. Do not expose unrelated messages,
+attendees, addresses, confidential material, or notifications during the
+demo. If source access or the resolution-check behavior has not been tested,
+use a labeled prerecorded rehearsal instead of improvising with a live
+mailbox.
+
 ## Teach `SKILL.md` using the included examples
 
 A Cowork skill is reusable instruction—not a connection, credential, scheduled
@@ -117,6 +226,69 @@ Agent, permits a verified Power BI semantic-model fallback, discloses the
 source used, protects data freshness and counting semantics, and allows email
 only after the answer and exact recipient/content confirmation.
 
+**Grounded demand-matching test**
+
+Import the skill, start a fresh Cowork task, confirm that
+`rentalagent-fabric-data` is active, and paste:
+
+```text
+Identify available equipment with low utilization that could satisfy upcoming
+demand. Use only relationships and measures supported by the connected data.
+Show the evidence, distinguish confirmed matches from candidates needing
+validation, and recommend one next action. Do not change records or send
+anything.
+```
+
+Use this prompt to demonstrate that the skill must first establish what the
+connected source actually supports. It must not infer current availability
+from historical locations, invent a low-utilization threshold, join equipment
+to demand without a supported relationship, or describe old recorded status
+as current without verified freshness.
+
+A good response:
+
+- names `RentalAgent` or the verified Power BI fallback actually used;
+- states the availability, utilization, demand, date, and location definitions
+  and identifies any threshold supplied by the source;
+- shows record-level or aggregated evidence for each proposed match;
+- labels a match **confirmed** only when the source supports every required
+  relationship and condition;
+- labels incomplete possibilities as **candidates needing validation** and
+  says exactly what remains unverified;
+- recommends one read-only next action; and
+- changes no records and sends no email, even though the skill can offer email
+  in other contexts.
+
+If the connected data cannot relate availability, utilization, and upcoming
+demand at a compatible grain, the correct outcome is a limitation or a
+narrower validation query—not a fabricated match.
+
+**The reveal: move from evidence to action**
+
+Trace one recommendation from the response back to the business data. Show the
+source values, supported relationships, filters, dates, and any freshness or
+validation caveat that led to it. Then paste this follow-up:
+
+```text
+Turn that recommendation into a concise outreach draft. Clearly identify
+anything we must verify before making a customer commitment.
+```
+
+Review the draft before taking any action. It should preserve the distinction
+between a confirmed match and a candidate, carry forward unresolved
+availability, location, timing, pricing, customer, and equipment-fit checks,
+and avoid presenting unverified details as commitments. This follow-up creates
+a draft only; it does not authorize sending email, contacting a customer, or
+changing records.
+
+**Why it lands:** The story moves from business question → evidence → decision
+→ action, rather than stopping at a dashboard.
+
+**Trade-off:** Use this reveal only after the data connection and matching logic
+have been tested. If source identity, freshness, relationships, or matching
+grain remain unverified, stop at the evidence review instead of drafting
+outreach.
+
 ### `simplerentalagent-fabric-data`
 
 The smaller example targets a data agent with the same name as its skill:
@@ -129,6 +301,15 @@ behavior, answer format, and a confirmation-gated email offer.
 This example demonstrates a longer workflow skill: intent routing, live
 connector discovery, scoped navigation, read-only file handling, verification,
 and separated implementation/live/deployment status.
+
+### `spreadsheet-operations-dashboard`
+
+This example turns a spreadsheet snapshot into a small operations dashboard
+with searchable records, status filters, summary cards, and a detail view. Use
+it with `dashboard/Financial Sample.xlsx` and the progression above to teach
+how a working prompt becomes a bounded, reviewable skill—snapshot-only framing,
+real-column filters, unknown-not-zero handling, an untouched source workbook,
+and attention highlighting restricted to rules the data actually supports.
 
 ## Import or update a Cowork skill
 
