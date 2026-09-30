@@ -302,6 +302,58 @@ This example demonstrates a longer workflow skill: intent routing, live
 connector discovery, scoped navigation, read-only file handling, verification,
 and separated implementation/live/deployment status.
 
+Use it when someone wants a reusable interactive browser for a folder in their
+own OneDrive. It is not intended for one-time file searches, document editing,
+permission changes, or static reports. The workflow requires Cowork's create
+and app-generation capabilities plus an authorized App Builder OneDrive
+connector that supports the required live-data operations.
+
+**Try the workflow**
+
+Import the skill, start a fresh Cowork task, confirm that
+`onedrive-document-dashboard2` is active, and paste:
+
+```text
+Build my OneDrive document dashboard for a folder I choose. Keep the dashboard
+read-only and let me browse subfolders, search filenames, filter file types,
+sort the loaded items, refresh the view, and open the original documents.
+```
+
+If no folder was named, the skill should ask which OneDrive folder to use. It
+must resolve that folder and the current user's authorized connection from live
+tool results rather than inventing a path, reusing another person's scope, or
+silently broadening access to the drive. Ambiguous folder matches should be
+confirmed with their full parent paths.
+
+A successful dashboard should:
+
+- keep navigation bounded to the selected root folder and provide breadcrumbs;
+- list folders and files separately, load subfolders lazily, and handle
+  pagination without duplicates or request loops;
+- label page-local search, filters, sorting, and item counts accurately rather
+  than implying a complete recursive or folder-wide result;
+- open original documents only from authoritative service-provided links;
+- provide explicit loading, empty, no-match, retryable error, and access-denied
+  states without modifying source files; and
+- report implementation/typecheck, live-read verification, interaction tests,
+  and deployment status separately.
+
+**Validate the result**
+
+Use an approved folder with known contents. Confirm that the selected root
+loads from the live connector, compare returned names and metadata with
+OneDrive, navigate into a real subfolder and back, exercise search/filter/sort
+and refresh, follow pagination when available, and open an original document
+link. A compiled or published app shell is not proof that live reads work. If a
+connector, permission, folder, pagination condition, or interaction cannot be
+tested, the handoff should identify it as not exercised or blocked instead of
+claiming success or substituting sample personal data.
+
+The skill creates a workflow for each user's own connection; it does not ship a
+preconfigured app, grant OneDrive access, share the resulting app, change
+document permissions, or authorize upload, rename, move, edit, or delete
+operations.
+
 ### `spreadsheet-operations-dashboard`
 
 This example turns a spreadsheet snapshot into a small operations dashboard
